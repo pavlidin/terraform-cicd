@@ -107,7 +107,7 @@ resource "azurerm_linux_virtual_machine" "cicd" {
   name                = "cicd"
   resource_group_name = "cicd"
   location            = "West Europe"
-  public_key          = file("~/.ssh/id_rsa.pub")
+  public_key          = file("C:/Users/bigni/.ssh/id_rsa.pub")
 }
 
   os_disk {
