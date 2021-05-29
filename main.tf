@@ -84,14 +84,6 @@ resource "azurerm_linux_virtual_machine" "cicd" {
   #   username   = "adminuser"
   #   public_key = file("~/.ssh/id_rsa.pub")
   # }
-
-  resource "azurerm_ssh_public_key" "cicd" {
-  name                = "cicd"
-  resource_group_name = "cicd"
-  location            = "West Europe"
-  public_key          = file("C:/Users/bigni/.ssh/id_rsa.pub")
-}
-
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
@@ -103,4 +95,11 @@ resource "azurerm_linux_virtual_machine" "cicd" {
     sku       = "16.04-LTS"
     version   = "latest"
   }
+}
+
+  resource "azurerm_ssh_public_key" "cicd" {
+  name                = "cicd"
+  resource_group_name = "cicd"
+  location            = "West Europe"
+  public_key          = file("C:/Users/bigni/.ssh/id_rsa.pub")
 }
