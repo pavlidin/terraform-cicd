@@ -62,7 +62,7 @@ resource "azurerm_public_ip" "cicd" {
   name                = "cicd-publicIP"
   location            = azurerm_resource_group.cicd.location
   resource_group_name = azurerm_resource_group.cicd.name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
 }
 
 # Create Network Security Group and rule
