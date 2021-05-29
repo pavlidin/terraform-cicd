@@ -24,18 +24,18 @@ provider "azurerm" {
 
 
 #Application VMs
-resource "azurerm_resource_group" "application" {
-  name     = "Application Resources"
-  location = "West Europe"
-}
+# resource "azurerm_resource_group" "application" {
+#   name     = "Application Resources"
+#   location = "West Europe"
+# }
 
-# Create a virtual network within the resource group
-resource "azurerm_virtual_network" "application" {
-  name                = "Application Network"
-  resource_group_name = azurerm_resource_group.application.name
-  location            = azurerm_resource_group.application.location
-  address_space       = ["10.0.0.0/16"]
-}
+# # Create a virtual network within the resource group
+# resource "azurerm_virtual_network" "application" {
+#   name                = "Application Network"
+#   resource_group_name = azurerm_resource_group.application.name
+#   location            = azurerm_resource_group.application.location
+#   address_space       = ["10.0.0.0/16"]
+# }
 
 #CI/CD VM
 
