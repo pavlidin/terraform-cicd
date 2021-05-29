@@ -30,13 +30,12 @@ resource "azurerm_resource_group" "application" {
 }
 
 # Create a virtual network within the resource group
-resource "azurerm_virtual_network" "application-network" {
+resource "azurerm_virtual_network" "applicationnetwork" {
   name                = "Application Network"
   resource_group_name = azurerm_resource_group.application.name
   location            = azurerm_resource_group.application.location
   address_space       = ["10.0.0.0/16"]
 }
-
 
 #CI/CD VM
 
