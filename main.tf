@@ -30,7 +30,7 @@ resource "azurerm_resource_group" "application" {
 }
 
 # Create a virtual network within the resource group
-resource "azurerm_virtual_network" "applicationnetwork" {
+resource "azurerm_virtual_network" "application" {
   name                = "Application Network"
   resource_group_name = azurerm_resource_group.application.name
   location            = azurerm_resource_group.application.location
