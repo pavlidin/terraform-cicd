@@ -5,6 +5,12 @@ terraform {
       version = "=2.46.0"
     }
   }
+  backend "remote" {
+    organization = "pf6-devops-team3"
+    workspaces {
+      name = "terraform-application"
+    }
+  }
 }
 
 # Configure the Microsoft Azure Provider
