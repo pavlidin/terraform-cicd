@@ -85,24 +85,6 @@ resource "azurerm_linux_virtual_machine" "cicd" {
   #   public_key = file("~/.ssh/id_rsa.pub")
   # }
 
-  resource "azurerm_network_security_group" "cicd" {
-  name                = "cicd-security-group"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.cicd.name
-  tags                = var.tags
-
-  security_rule {
-    name                       = "SSH"
-    priority                   = 1000
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = 22
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-}
   resource "azurerm_ssh_public_key" "cicd" {
   name                = "cicd"
   resource_group_name = "cicd"
