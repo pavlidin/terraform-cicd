@@ -73,7 +73,7 @@ resource "azurerm_network_security_group" "cicd" {
   resource_group_name = azurerm_resource_group.cicd.name
   security_rule {
     name                       = "troll"
-    priority                   = 10
+    priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
