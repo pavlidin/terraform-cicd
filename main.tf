@@ -23,7 +23,7 @@ provider "azurerm" {
 }
 
 # Create a resource group
-resource "azurerm_resource_group" "example" {
+resource "azurerm_resource_group" "example-2" {
   name     = "example-resources"
   location = "West Europe"
 }
@@ -31,7 +31,7 @@ resource "azurerm_resource_group" "example" {
 # Create a virtual network within the resource group
 resource "azurerm_virtual_network" "example" {
   name                = "example-network"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example-2.name
+  location            = azurerm_resource_group.example-2.location
   address_space       = ["10.0.0.0/16"]
 }
