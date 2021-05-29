@@ -40,7 +40,7 @@ provider "azurerm" {
 #CI/CD VM
 
 resource "azurerm_resource_group" "cicd" {
-  name     = "cicdresources"
+  name     = "cicd-resources"
   location = "West Europe"
 }
 
@@ -51,7 +51,7 @@ resource "azurerm_virtual_network" "cicd" {
   resource_group_name = azurerm_resource_group.cicd.name
 }
 
-resource "azurerm_subnet" "cicd" {
+resource "azurerm_subnet" "internal" {
   name                 = "internal"
   resource_group_name  = azurerm_resource_group.cicd.name
   virtual_network_name = azurerm_virtual_network.cicd.name
@@ -64,42 +64,43 @@ resource "azurerm_network_interface" "cicd" {
   resource_group_name = azurerm_resource_group.cicd.name
 
   ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.cicd.id
+    name                          = "testconfiguration1"
+    subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
   }
 }
 
-resource "azurerm_linux_virtual_machine" "cicd" {
-  name                = "cicd-machine"
-  resource_group_name = azurerm_resource_group.cicd.name
-  location            = azurerm_resource_group.cicd.location
-  size                = "Standard_F2"
-  admin_username      = "adminuser"
-  network_interface_ids = [
-    azurerm_network_interface.cicd.id,
-  ]
+resource "azurerm_virtual_machine" "cicd" {
+  name                  = "cicd-vm"
+  location              = azurerm_resource_group.cicd.location
+  resource_group_name   = azurerm_resource_group.cicd.name
+  network_interface_ids = [azurerm_network_interface.cicd.id]
+  vm_size               = "Standard_DS1_v2"
 
-  admin_ssh_key {
-    username   = "adminuser"
-    public_key = file("C:/ssh/cicd-sshkey.pem")
-  }
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
-  }
+  # Uncomment this line to delete the OS disk automatically when deleting the VM
+  # delete_os_disk_on_termination = true
 
-  source_image_reference {
+  # Uncomment this line to delete the data disks automatically when deleting the VM
+  # delete_data_disks_on_termination = true
+
+  storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
     sku       = "16.04-LTS"
     version   = "latest"
   }
+  storage_os_disk {
+    name              = "myosdisk1"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
+  }
+  os_profile {
+    computer_name  = "hostname"
+    admin_username = "testadmin"
+    admin_password = "Password1234!"
+  }
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
 }
-
-#   resource "azurerm_ssh_public_key" "cicd" {
-#   name                = "cicd"
-#   resource_group_name = "cicd"
-#   location            = "West Europe"
-#   public_key          = file("C:/ssh/cicd-sshkey.pem")
-# }
