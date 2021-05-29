@@ -107,17 +107,11 @@ resource "azurerm_network_interface" "cicd" {
   }
 }
 
-resource "tls_private_key" "cicd-ssh" {
+resource "tls_private_key" "example_ssh" {
   algorithm = "RSA"
   rsa_bits = 4096
 }
-output "tls_private_key" { 
-    value = tls_private_key.cicd-ssh.private_key_pem 
-    sensitive = true
-}
-
-
-
+output "tls_private_key" { value = tls_private_key.example_ssh.private_key_pem }
 resource "azurerm_virtual_machine" "cicd" {
   name                  = "cicd-vm"
   location              = azurerm_resource_group.cicd.location
@@ -147,9 +141,12 @@ resource "azurerm_virtual_machine" "cicd" {
   #   disable_password_authentication = false
   # }
 
-  admin_ssh_key {
+    computer_name  = azurerm_virtual_machine.cicd.name
+    admin_username = "azureuser"
+    disable_password_authentication = true
+    admin_ssh_key {
         username       = "azureuser"
-        public_key     = file("~/.ssh/id_rsa.pub")
+        public_key     = tls_private_key.example_ssh.public_key_openssh
     }
   
 }
