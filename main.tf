@@ -97,9 +97,9 @@ resource "azurerm_linux_virtual_machine" "cicd" {
   }
 }
 
-  resource "azurerm_ssh_public_key" "cicd" {
-  name                = "cicd"
-  resource_group_name = "cicd"
-  location            = "West Europe"
-  public_key          = file("C:/ssh/cicd-sshkey.pem")
-}
+#   resource "azurerm_ssh_public_key" "cicd" {
+#   name                = "cicd"
+#   resource_group_name = "cicd"
+#   location            = "West Europe"
+#   public_key          = file("C:/ssh/cicd-sshkey.pem")
+# }
