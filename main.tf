@@ -40,7 +40,7 @@ provider "azurerm" {
 #CI/CD VM
 
 resource "azurerm_resource_group" "cicd" {
-  name     = "cicd-resources"
+  name     = "cicdresources"
   location = "West Europe"
 }
 
