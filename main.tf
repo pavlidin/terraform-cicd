@@ -80,10 +80,10 @@ resource "azurerm_linux_virtual_machine" "cicd" {
     azurerm_network_interface.cicd.id,
   ]
 
-  # admin_ssh_key {
-  #   username   = "adminuser"
-  #   public_key = file("~/.ssh/id_rsa.pub")
-  # }
+  admin_ssh_key {
+    username   = "adminuser"
+    public_key = file("C:/ssh/cicd-sshkey.pem")
+  }
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
