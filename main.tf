@@ -84,7 +84,7 @@ resource "azurerm_network_security_group" "cicd" {
   }
   security_rule {
     name                       = "HTTP"
-    priority                   = 100
+    priority                   = 200
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
