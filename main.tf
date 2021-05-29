@@ -44,19 +44,19 @@ resource "azurerm_resource_group" "cicd" {
   location = "West Europe"
 }
 
-# resource "azurerm_virtual_network" "cicdnetwork" {
-#   name                = "CI/CD Network"
-#   address_space       = ["10.0.0.0/16"]
-#   location            = azurerm_resource_group.cicdnetwork.location
-#   resource_group_name = azurerm_resource_group.cicdnetwork.name
-# }
+resource "azurerm_virtual_network" "cicd" {
+  name                = "CI/CD Network"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.cicd.location
+  resource_group_name = azurerm_resource_group.cicd.name
+}
 
-# resource "azurerm_subnet" "example" {
-#   name                 = "internal"
-#   resource_group_name  = azurerm_resource_group.example.name
-#   virtual_network_name = azurerm_virtual_network.example.name
-#   address_prefixes     = ["10.0.2.0/24"]
-# }
+resource "azurerm_subnet" "cicd" {
+  name                 = "internal"
+  resource_group_name  = azurerm_resource_group.cicd.name
+  virtual_network_name = azurerm_virtual_network.cicd.name
+  address_prefixes     = ["10.0.2.0/24"]
+}
 
 resource "azurerm_network_interface" "cicd" {
   name                = "cicd-nic"
@@ -65,7 +65,7 @@ resource "azurerm_network_interface" "cicd" {
 
   ip_configuration {
     name                          = "internal"
-    # subnet_id                     = azurerm_subnet.cicd.id
+    subnet_id                     = azurerm_subnet.cicd.id
     private_ip_address_allocation = "Dynamic"
   }
 }
