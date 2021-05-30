@@ -175,7 +175,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   }
 
   output "public_ip_address" {
-    value = data.azurerm_public_ip.example.ip_address
+    value = data.azurerm_public_ip.mycicdpublicip.ip_address
   }
 
   # provisioner "remote-exec" {
