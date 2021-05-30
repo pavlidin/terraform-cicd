@@ -169,10 +169,10 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   computer_name                   = "cicdvm"
   admin_username                  = "azureuser"
   disable_password_authentication = true
-  admin_ssh_key {
-    username   = "azureuser"
-    public_key = tls_private_key.cicd_ssh.public_key_openssh
-  }
+  # admin_ssh_key {
+  #   username   = "azureuser"
+  #   public_key = tls_private_key.cicd_ssh.public_key_openssh
+  # }
 
   boot_diagnostics {
     storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
@@ -197,7 +197,7 @@ resource "azurerm_ssh_public_key" "example" {
   name                = "example"
   resource_group_name = "example"
   location            = "West Europe"
-  public_key          = file("~/.ssh/id_rsa.pub")
+  public_key          = file("C:/Users/bigni/.ssh/id_rsa.pub")
 }
 
 data "azurerm_public_ip" "cicd" {
