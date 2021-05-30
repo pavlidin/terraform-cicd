@@ -173,6 +173,12 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   tags = {
     environment = "CICD Infrastructure"
   }
+  
+  data "azurerm_public_ip" "mycicdpublicip" {
+  name                = azurerm_public_ip.mycicdpublicip.name
+  resource_group_name = azurerm_virtual_machine.mycicdpublicip.resource_group_name
+  depends_on          = [azurerm_virtual_machine.mycicdpublicip]
+}
 
   output "public_ip_address" {
     value = data.azurerm_public_ip.mycicdpublicip.ip_address
