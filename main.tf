@@ -136,14 +136,14 @@ resource "azurerm_storage_account" "mystorageaccount" {
 }
 
 # Create (and display) an SSH key
-resource "tls_private_key" "cicd_ssh" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-output "tls_private_key" {
-  value     = tls_private_key.cicd_ssh.private_key_pem
-  sensitive = true
-}
+# resource "tls_private_key" "cicd_ssh" {
+#   algorithm = "RSA"
+#   rsa_bits  = 4096
+# }
+# output "tls_private_key" {
+#   value     = tls_private_key.cicd_ssh.private_key_pem
+#   sensitive = true
+# }
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "mycicdvm" {
@@ -191,6 +191,13 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   #     "sudo apt-get install ansible -y"
   #   ]
   # }
+}
+
+resource "azurerm_ssh_public_key" "example" {
+  name                = "example"
+  resource_group_name = "example"
+  location            = "West Europe"
+  public_key          = file("~/.ssh/id_rsa.pub")
 }
 
 data "azurerm_public_ip" "cicd" {
