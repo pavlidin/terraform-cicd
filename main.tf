@@ -175,11 +175,6 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   #   public_key = tls_private_key.cicd_ssh.public_key_openssh
   # }
 
-  admin_ssh_key {
-    username   = "azureuser"
-    public_key = file("C/Users/bigni/.ssh/id_rsa.pub")
-  }
-
   boot_diagnostics {
     storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
   }
