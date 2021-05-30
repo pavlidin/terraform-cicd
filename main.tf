@@ -186,6 +186,13 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
     public_key = var.public_key
   }
 
+  resource "azurerm_ssh_public_key" "cicdSSHpublickey" {
+  name                = "cicdSSHpublickey"
+  resource_group_name = azurerm_resource_group.cicdgroup.name
+  location            = "West Europe"
+  public_key          = var.public_key
+}
+
 #   resource "azurerm_ssh_public_key" "example" {
 #   name                = "example"
 #   resource_group_name = "example"
