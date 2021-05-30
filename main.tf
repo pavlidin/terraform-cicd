@@ -135,15 +135,15 @@ resource "azurerm_storage_account" "mystorageaccount" {
   }
 }
 
-# Create (and display) an SSH key
-# resource "tls_private_key" "cicd_ssh" {
-#   algorithm = "RSA"
-#   rsa_bits  = 4096
-# }
-# output "tls_private_key" {
-#   value     = tls_private_key.cicd_ssh.private_key_pem
-#   sensitive = true
-# }
+Create (and display) an SSH key
+resource "tls_private_key" "cicd_ssh" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+output "tls_private_key" {
+  value     = tls_private_key.cicd_ssh.private_key_pem
+  sensitive = true
+}
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "mycicdvm" {
@@ -170,10 +170,10 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   admin_username                  = "azureuser"
   disable_password_authentication = true
   
-  # admin_ssh_key {
-  #   username   = "azureuser"
-  #   public_key = tls_private_key.cicd_ssh.public_key_openssh
-  # }
+  admin_ssh_key {
+    username   = "azureuser"
+    public_key = tls_private_key.cicd_ssh.public_key_openssh
+  }
 
   boot_diagnostics {
     storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
