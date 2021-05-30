@@ -161,7 +161,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   computer_name                   = "cicdvm"
   admin_username                  = "azureuser"
   disable_password_authentication = true
-    admin_ssh_key {
+  admin_ssh_key {
     username   = "azureuser"
     public_key = tls_private_key.cicd_ssh.public_key_openssh
   }
@@ -172,6 +172,10 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
 
   tags = {
     environment = "CICD Infrastructure"
+  }
+
+  output "public_ip_address" {
+    value = data.azurerm_public_ip.example.ip_address
   }
 
   # provisioner "remote-exec" {
