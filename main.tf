@@ -183,7 +183,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   
   admin_ssh_key {
     username   = "azureuser"
-    public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDImDC6rWNvToKiHJ3oMG8r0ImORGueWf6JUCmrUEey8QydoXFN6HxBtdv6sLLkHv2Cso3T2iEhD9j7fLuIy6LKio0iphqDwpW/CTIPkgSIMMaZgXNXM4+R7MdxFENRl+A/xiagaaTObC0CL4mwOLVp1Rh+NJg7NvvQWz/rNWDrZ6Qtvln7ZZSLgc+ylmxXBkiK+HoxrrqlFIEv9UGu2DLW8xN0/fWJPdMhtgN/FPiRpXbG2YUXC25gjN2+NjuflNmjg3cTg8f7fVM71VP7cStzhOJZCHO6gmFVi/Fqh8aSaIKLNzLr/IqzIYtDX4qHSvCskdKlnbpCPvM3ajuyyf0bnhGd2UelYl1sZYFC+/QuMulr/cTGbcywtt6k0CKMLdQk5S8YhXNpq/jvYlXjYnkfvKZw1Lm/HcR6u/7+YPn2P8xCb6UQmK0swF1SV1uID8KqHxdDZ9GgmQeVKsfQj8oKDhIUNuDuQQkFLi7MyOMHcuUT+c5WBsr9kCjJrDsedj0= generated-by-azure"
+    public_key = var.public_key
   }
 
 #   resource "azurerm_ssh_public_key" "example" {
