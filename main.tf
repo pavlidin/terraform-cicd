@@ -136,14 +136,14 @@ resource "azurerm_storage_account" "mystorageaccount" {
 }
 
 #Create (and display) an SSH key
-resource "tls_private_key" "cicd_ssh" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-output "tls_private_key" {
-  value     = tls_private_key.cicd_ssh.private_key_pem
-  sensitive = true
-}
+# resource "tls_private_key" "cicd_ssh" {
+#   algorithm = "RSA"
+#   rsa_bits  = 4096
+# }
+# output "tls_private_key" {
+#   value     = tls_private_key.cicd_ssh.private_key_pem
+#   sensitive = true
+# }
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "mycicdvm" {
@@ -172,8 +172,15 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   
   admin_ssh_key {
     username   = "azureuser"
-    public_key = tls_private_key.cicd_ssh.public_key_openssh
+    public_key = file("/home/azureuser/.ssh/authorized_keys")
   }
+
+#   resource "azurerm_ssh_public_key" "example" {
+#   name                = "example"
+#   resource_group_name = "example"
+#   location            = "West Europe"
+#   public_key          = file("~/.ssh/id_rsa.pub")
+# }
 
   boot_diagnostics {
     storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
@@ -193,13 +200,6 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   #   ]
   # }
 }
-
-# resource "azurerm_ssh_public_key" "example" {
-#   name                = "example"
-#   resource_group_name = "example"
-#   location            = "West Europe"
-#   public_key          = file("C:/Users/bigni/.ssh/id_rsa.pub")
-# }
 
 data "azurerm_public_ip" "cicd" {
   name                = azurerm_public_ip.mycicdpublicip.name
