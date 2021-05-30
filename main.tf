@@ -6,6 +6,9 @@ terraform {
       version = "~>2.0"
     }
   }
+  backend "remote" {
+    organization = "pf6-devops-team3"
+  }
 }
 provider "azurerm" {
   features {}
