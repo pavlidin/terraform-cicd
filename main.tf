@@ -177,7 +177,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
 
   admin_ssh_key {
     username   = "azureuser"
-    public_key = file("~/.ssh/id_rsa.pub")
+    public_key = file("C/Users/bigni/.ssh/id_rsa.pub")
   }
 
   boot_diagnostics {
@@ -199,12 +199,12 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   # }
 }
 
-resource "azurerm_ssh_public_key" "example" {
-  name                = "example"
-  resource_group_name = "example"
-  location            = "West Europe"
-  public_key          = file("C:/Users/bigni/.ssh/id_rsa.pub")
-}
+# resource "azurerm_ssh_public_key" "example" {
+#   name                = "example"
+#   resource_group_name = "example"
+#   location            = "West Europe"
+#   public_key          = file("C:/Users/bigni/.ssh/id_rsa.pub")
+# }
 
 data "azurerm_public_ip" "cicd" {
   name                = azurerm_public_ip.mycicdpublicip.name
