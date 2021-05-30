@@ -181,9 +181,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   tags = {
     environment = "CICD Infrastructure"
   }
-  output "public_ip_address" {
-    value = data.azurerm_public_ip.ip.ip_address
-  }
+
 
   # provisioner "remote-exec" {
   #   inline = [
@@ -194,4 +192,8 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   #     "sudo apt-get install ansible -y"
   #   ]
   # }
+}
+
+output "public_ip_address" {
+  value = data.azurerm_public_ip.ip.ip_address
 }
