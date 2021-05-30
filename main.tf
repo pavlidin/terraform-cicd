@@ -217,7 +217,3 @@ data "azurerm_public_ip" "cicd" {
   resource_group_name = azurerm_linux_virtual_machine.mycicdvm.resource_group_name
   depends_on          = [azurerm_linux_virtual_machine.mycicdvm]
 }
-
-output "public_ip_address" {
-  value = data.azurerm_public_ip.cicd.ip_address
-}
