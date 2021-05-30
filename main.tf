@@ -7,7 +7,12 @@ terraform {
     }
   }
   backend "remote" {
+    hostname     = "app.terraform.io"
     organization = "pf6-devops-team3"
+
+    workspaces {
+      name = "terraform-cicd"
+    }
   }
 }
 provider "azurerm" {
