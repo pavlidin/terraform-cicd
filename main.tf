@@ -174,13 +174,13 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
     environment = "CICD Infrastructure"
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo mkdir Helloworld",
-      "sudo apt-get install python -y",
-      "sudo apt-add-repository ppa:ansible/ansible",
-      "sudo apt-get update",
-      "sudo apt-get install ansible -y"
-    ]
-  }
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo mkdir Helloworld",
+  #     "sudo apt-get install python -y",
+  #     "sudo apt-add-repository ppa:ansible/ansible",
+  #     "sudo apt-get update",
+  #     "sudo apt-get install ansible -y"
+  #   ]
+  # }
 }
