@@ -175,7 +175,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
         environment = "CICD Infrastructure"
     }
 
-      provisioner "remote-exec" {
+    provisioner "remote-exec" {
         inline = [
          "sudo apt-get update",
          "sudo apt-get install python -y",
@@ -183,12 +183,5 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
          "sudo apt-get update",
          "sudo apt-get install ansible -y"
         ] 
-      connection {
-        type = "ssh"
-        user = var.admin_username
-        password = var.admin_password
-        host = azurerm_public_ip.main.ip_address
-      }
-
     }
 }
