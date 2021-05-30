@@ -194,6 +194,11 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   # }
 }
 
+data "azurerm_public_ip" "cicd" {
+  name                = azurerm_public_ip.mycicdpublicip.name
+  resource_group_name = azurerm_linux_virtual_machine.mycicdvm.name
+}
+
 output "public_ip_address" {
-  value = data.azurerm_public_ip.ip.ip_address
+  value = data.azurerm_public_ip.cicd.ip_address
 }
