@@ -1,1 +1,1 @@
-# terraform-java-project
+# terraform-cicd
