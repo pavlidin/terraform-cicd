@@ -176,15 +176,14 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   tags = {
     environment = "CICD Infrastructure"
   }
-  
-  data "azurerm_public_ip" "mycicdpublicip" {
-  name                = azurerm_public_ip.mycicdpublicip.name
-  resource_group_name = azurerm_linux_virtual_machine.mycicdvm.resource_group_name
-  depends_on          = [azurerm_linux_virtual_machine.mycicdvm]
-}
+
+  data "azurerm_public_ip" "example" {
+    name                = azurerm_public_ip.mycicdpublicip.name
+    resource_group_name = azurerm_virtual_machine.mycicdvm.resource_group_name
+  }
 
   output "public_ip_address" {
-    value = data.azurerm_public_ip.mycicdpublicip.ip_address
+    value = data.azurerm_public_ip.example.ip_address
   }
 
   # provisioner "remote-exec" {
