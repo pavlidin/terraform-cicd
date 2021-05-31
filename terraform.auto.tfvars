@@ -1,1 +1,2 @@
 location = "westeurope"
+prefix = "cicd"

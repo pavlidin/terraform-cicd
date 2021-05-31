@@ -1,4 +1,3 @@
-# Configure the Microsoft Azure Provider
 terraform {
   required_providers {
     azurerm = {
@@ -23,7 +22,6 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
 }
 
-# Create a resource group if it doesn't exist
 resource "azurerm_resource_group" "cicd" {
   name     = "CICD"
   location = var.location
@@ -33,9 +31,8 @@ resource "azurerm_resource_group" "cicd" {
   }
 }
 
-# Create virtual network
 resource "azurerm_virtual_network" "cicdnetwork" {
-  name                = "myVnet"
+  name                = "${var.prefix}-Vnet"
   address_space       = ["10.0.0.0/16"]
   location            = var.location
   resource_group_name = azurerm_resource_group.cicd.name
@@ -45,17 +42,15 @@ resource "azurerm_virtual_network" "cicdnetwork" {
   }
 }
 
-# Create subnet
-resource "azurerm_subnet" "mycicdsubnet" {
-  name                 = "mySubnet"
+resource "azurerm_subnet" "cicdsubnet" {
+  name                 = "${var.prefix}-Subnet"
   resource_group_name  = azurerm_resource_group.cicd.name
   virtual_network_name = azurerm_virtual_network.cicdnetwork.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
-# Create public IPs
-resource "azurerm_public_ip" "mycicdpublicip" {
-  name                = "myPublicIP"
+resource "azurerm_public_ip" "cicdpublicip" {
+  name                = "${var.prefix}-PublicIP"
   location            = var.location
   resource_group_name = azurerm_resource_group.cicd.name
   allocation_method   = "Dynamic"
@@ -65,9 +60,8 @@ resource "azurerm_public_ip" "mycicdpublicip" {
   }
 }
 
-# Create Network Security Group and rule
-resource "azurerm_network_security_group" "mycicdnsg" {
-  name                = "myNetworkSecurityGroup"
+resource "azurerm_network_security_group" "cicdnsg" {
+  name                = "${var.prefix}-NetworkSecurityGroup"
   location            = var.location
   resource_group_name = azurerm_resource_group.cicd.name
 
@@ -99,14 +93,13 @@ resource "azurerm_network_security_group" "mycicdnsg" {
   }
 }
 
-# Create network interface
-resource "azurerm_network_interface" "mycicdnic" {
-  name                = "myNIC"
+resource "azurerm_network_interface" "cicdnic" {
+  name                = "${var.prefix}-NIC"
   location            = var.location
   resource_group_name = azurerm_resource_group.cicd.name
 
   ip_configuration {
-    name                          = "myNicConfiguration"
+    name                          = "${var.prefix}-NicConfiguration"
     subnet_id                     = azurerm_subnet.mycicdsubnet.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.mycicdpublicip.id
@@ -117,24 +110,20 @@ resource "azurerm_network_interface" "mycicdnic" {
   }
 }
 
-# Connect the security group to the network interface
-resource "azurerm_network_interface_security_group_association" "example" {
+resource "azurerm_network_interface_security_group_association" "cicdsga" {
   network_interface_id      = azurerm_network_interface.mycicdnic.id
   network_security_group_id = azurerm_network_security_group.mycicdnsg.id
 }
 
-# Generate random text for a unique storage account name
 resource "random_id" "randomId" {
   keepers = {
-    # Generate a new ID only when a new resource group is defined
     resource_group = azurerm_resource_group.cicd.name
   }
 
   byte_length = 8
 }
 
-# Create storage account for boot diagnostics
-resource "azurerm_storage_account" "mystorageaccount" {
+resource "azurerm_storage_account" "cicdstorageaccount" {
   name                     = "diag${random_id.randomId.hex}"
   resource_group_name      = azurerm_resource_group.cicd.name
   location                 = var.location
@@ -146,19 +135,8 @@ resource "azurerm_storage_account" "mystorageaccount" {
   }
 }
 
-#Create (and display) an SSH key
-# resource "tls_private_key" "cicd_ssh" {
-#   algorithm = "RSA"
-#   rsa_bits  = 4096
-# }
-# output "tls_private_key" {
-#   value     = tls_private_key.cicd_ssh.private_key_pem
-#   sensitive = true
-# }
-
-# Create virtual machine
-resource "azurerm_linux_virtual_machine" "mycicdvm" {
-  name                  = "myVM"
+resource "azurerm_linux_virtual_machine" "cicdvm" {
+  name                  = "${var.prefix}VM"
   location              = var.location
   resource_group_name   = azurerm_resource_group.cicd.name
   network_interface_ids = [azurerm_network_interface.mycicdnic.id]
@@ -177,7 +155,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
     version   = "latest"
   }
 
-  computer_name                   = "cicdvm"
+  computer_name                   = azurerm_linux_virtual_machine.cicdvm.name
   admin_username                  = "azureuser"
   disable_password_authentication = true
   
@@ -185,13 +163,6 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
     username   = "azureuser"
     public_key = var.public_key
   }
-
-#   resource "azurerm_ssh_public_key" "example" {
-#   name                = "example"
-#   resource_group_name = "example"
-#   location            = var.location
-#   public_key          = file("~/.ssh/id_rsa.pub")
-# }
 
   boot_diagnostics {
     storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint

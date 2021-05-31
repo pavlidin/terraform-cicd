@@ -21,3 +21,7 @@ variable public_key {
 variable location {
     type = string
 }
+
+variable prefix {
+    type = string
+}
