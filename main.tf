@@ -192,6 +192,6 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
 
 data "azurerm_public_ip" "cicd" {
   name                = azurerm_public_ip.mycicdpublicip.name
-  resource_group_name = azurerm_linux_virtual_machine.mycicdvm.resource_group_name
-  depends_on          = [azurerm_linux_virtual_machine.mycicdvm]
+  resource_group_name = azurerm_linux_virtual_machine.cicdvm.resource_group_name
+  depends_on          = [azurerm_linux_virtual_machine.cicdvm]
 }
