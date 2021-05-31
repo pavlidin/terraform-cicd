@@ -171,9 +171,9 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   }
 
   source_image_reference {
-    publisher = "OpenLogic"
-    offer     = "CentOS"
-    sku       = "7.5"
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
 
@@ -201,15 +201,15 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
     environment = "CICD Infrastructure"
   }
 
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "sudo mkdir Helloworld",
-  #     "sudo apt-get install python -y",
-  #     "sudo apt-add-repository ppa:ansible/ansible",
-  #     "sudo apt-get update",
-  #     "sudo apt-get install ansible -y"
-  #   ]
-  # }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mkdir Helloworld",
+      "sudo apt-get install python -y",
+      "sudo apt-add-repository ppa:ansible/ansible",
+      "sudo apt-get update",
+      "sudo apt-get install ansible -y"
+    ]
+  }
 }
 
   resource "azurerm_ssh_public_key" "cicdSSHpublickey" {
