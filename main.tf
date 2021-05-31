@@ -24,8 +24,8 @@ provider "azurerm" {
 }
 
 # Create a resource group if it doesn't exist
-resource "azurerm_resource_group" "cicdgroup" {
-  name     = "mycicdgroup"
+resource "azurerm_resource_group" "cicd" {
+  name     = "CICD"
   location = "West Europe"
 
   tags = {
@@ -38,7 +38,7 @@ resource "azurerm_virtual_network" "cicdnetwork" {
   name                = "myVnet"
   address_space       = ["10.0.0.0/16"]
   location            = "West Europe"
-  resource_group_name = azurerm_resource_group.cicdgroup.name
+  resource_group_name = azurerm_resource_group.cicd.name
 
   tags = {
     environment = "CICD Infrastructure"
@@ -48,7 +48,7 @@ resource "azurerm_virtual_network" "cicdnetwork" {
 # Create subnet
 resource "azurerm_subnet" "mycicdsubnet" {
   name                 = "mySubnet"
-  resource_group_name  = azurerm_resource_group.cicdgroup.name
+  resource_group_name  = azurerm_resource_group.cicd.name
   virtual_network_name = azurerm_virtual_network.cicdnetwork.name
   address_prefixes     = ["10.0.1.0/24"]
 }
@@ -57,7 +57,7 @@ resource "azurerm_subnet" "mycicdsubnet" {
 resource "azurerm_public_ip" "mycicdpublicip" {
   name                = "myPublicIP"
   location            = "West Europe"
-  resource_group_name = azurerm_resource_group.cicdgroup.name
+  resource_group_name = azurerm_resource_group.cicd.name
   allocation_method   = "Dynamic"
 
   tags = {
@@ -69,7 +69,7 @@ resource "azurerm_public_ip" "mycicdpublicip" {
 resource "azurerm_network_security_group" "mycicdnsg" {
   name                = "myNetworkSecurityGroup"
   location            = "West Europe"
-  resource_group_name = azurerm_resource_group.cicdgroup.name
+  resource_group_name = azurerm_resource_group.cicd.name
 
   security_rule {
     name                       = "SSH"
@@ -103,7 +103,7 @@ resource "azurerm_network_security_group" "mycicdnsg" {
 resource "azurerm_network_interface" "mycicdnic" {
   name                = "myNIC"
   location            = "West Europe"
-  resource_group_name = azurerm_resource_group.cicdgroup.name
+  resource_group_name = azurerm_resource_group.cicd.name
 
   ip_configuration {
     name                          = "myNicConfiguration"
@@ -127,7 +127,7 @@ resource "azurerm_network_interface_security_group_association" "example" {
 resource "random_id" "randomId" {
   keepers = {
     # Generate a new ID only when a new resource group is defined
-    resource_group = azurerm_resource_group.cicdgroup.name
+    resource_group = azurerm_resource_group.cicd.name
   }
 
   byte_length = 8
@@ -136,7 +136,7 @@ resource "random_id" "randomId" {
 # Create storage account for boot diagnostics
 resource "azurerm_storage_account" "mystorageaccount" {
   name                     = "diag${random_id.randomId.hex}"
-  resource_group_name      = azurerm_resource_group.cicdgroup.name
+  resource_group_name      = azurerm_resource_group.cicd.name
   location                 = "West Europe"
   account_tier             = "Standard"
   account_replication_type = "LRS"
@@ -160,7 +160,7 @@ resource "azurerm_storage_account" "mystorageaccount" {
 resource "azurerm_linux_virtual_machine" "mycicdvm" {
   name                  = "myVM"
   location              = "West Europe"
-  resource_group_name   = azurerm_resource_group.cicdgroup.name
+  resource_group_name   = azurerm_resource_group.cicd.name
   network_interface_ids = [azurerm_network_interface.mycicdnic.id]
   size                  = "Standard_DS1_v2"
 
@@ -181,10 +181,10 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   admin_username                  = "azureuser"
   disable_password_authentication = true
   
-  admin_ssh_key {
-    username   = "azureuser"
-    public_key = var.public_key
-  }
+  # admin_ssh_key {
+  #   username   = "azureuser"
+  #   public_key = var.public_key
+  # }
 
 #   resource "azurerm_ssh_public_key" "example" {
 #   name                = "example"
@@ -214,7 +214,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
 
   resource "azurerm_ssh_public_key" "cicdSSHpublickey" {
   name                = "cicdSSHpublickey"
-  resource_group_name = azurerm_resource_group.cicdgroup.name
+  resource_group_name = azurerm_resource_group.cicd.name
   location            = "West Europe"
   public_key          = var.public_key
 }
