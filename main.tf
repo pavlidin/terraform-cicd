@@ -100,9 +100,9 @@ resource "azurerm_network_interface" "cicdnic" {
 
   ip_configuration {
     name                          = "${var.prefix}-NicConfiguration"
-    subnet_id                     = azurerm_subnet.mycicdsubnet.id
+    subnet_id                     = azurerm_subnet.cicdsubnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.mycicdpublicip.id
+    public_ip_address_id          = azurerm_public_ip.cicdpublicip.id
   }
 
   tags = {
@@ -111,8 +111,8 @@ resource "azurerm_network_interface" "cicdnic" {
 }
 
 resource "azurerm_network_interface_security_group_association" "cicdsga" {
-  network_interface_id      = azurerm_network_interface.mycicdnic.id
-  network_security_group_id = azurerm_network_security_group.mycicdnsg.id
+  network_interface_id      = azurerm_network_interface.cicdnic.id
+  network_security_group_id = azurerm_network_security_group.cicdnsg.id
 }
 
 resource "random_id" "randomId" {
@@ -139,7 +139,7 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
   name                  = "${var.prefix}VM"
   location              = var.location
   resource_group_name   = azurerm_resource_group.cicd.name
-  network_interface_ids = [azurerm_network_interface.mycicdnic.id]
+  network_interface_ids = [azurerm_network_interface.cicdnic.id]
   size                  = "Standard_DS1_v2"
 
   os_disk {
@@ -165,7 +165,7 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
   }
 
   boot_diagnostics {
-    storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
+    storage_account_uri = azurerm_storage_account.cicdstorageaccount.primary_blob_endpoint
   }
 
   tags = {
@@ -191,7 +191,7 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
 }
 
 data "azurerm_public_ip" "cicd" {
-  name                = azurerm_public_ip.mycicdpublicip.name
+  name                = azurerm_public_ip.cicdpublicip.name
   resource_group_name = azurerm_linux_virtual_machine.cicdvm.resource_group_name
   depends_on          = [azurerm_linux_virtual_machine.cicdvm]
 }
