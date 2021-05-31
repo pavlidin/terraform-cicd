@@ -1,6 +1,4 @@
 # Configure the Microsoft Azure Provider
-terraform import azurerm_ssh_public_key.example /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/group1/providers/Microsoft.Compute/SshPublicKeys/mySshPublicKeyName1
-
 terraform {
   required_providers {
     azurerm = {
@@ -200,15 +198,15 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
     environment = "CICD Infrastructure"
   }
 
-  provisioner "remote-exec" {
-    inline = [
-      "sudo mkdir Helloworld",
-      "sudo apt-get install python -y",
-      "sudo apt-add-repository ppa:ansible/ansible",
-      "sudo apt-get update",
-      "sudo apt-get install ansible -y"
-    ]
-  }
+  # provisioner "remote-exec" {
+  #   inline = [
+  #     "sudo mkdir Helloworld",
+  #     "sudo apt-get install python -y",
+  #     "sudo apt-add-repository ppa:ansible/ansible",
+  #     "sudo apt-get update",
+  #     "sudo apt-get install ansible -y"
+  #   ]
+  # }
 
   user_data = "#cloud-config\n${jsonencode({
     package_update  = true
