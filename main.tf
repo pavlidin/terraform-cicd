@@ -136,7 +136,7 @@ resource "azurerm_storage_account" "cicdstorageaccount" {
 }
 
 resource "azurerm_linux_virtual_machine" "cicdvm" {
-  name                  = "${var.prefix}VM"
+  name                  = "${var.prefix}-VM"
   location              = var.location
   resource_group_name   = azurerm_resource_group.cicd.name
   network_interface_ids = [azurerm_network_interface.cicdnic.id]
@@ -155,7 +155,7 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
     version   = "latest"
   }
 
-  computer_name                   = azurerm_linux_virtual_machine.cicdvm.name
+  computer_name                   = "${var.prefix}-VM"
   admin_username                  = "azureuser"
   disable_password_authentication = true
   
