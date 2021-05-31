@@ -181,10 +181,10 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   admin_username                  = "azureuser"
   disable_password_authentication = true
   
-  # admin_ssh_key {
-  #   username   = "azureuser"
-  #   public_key = var.public_key
-  # }
+  admin_ssh_key {
+    username   = "azureuser"
+    public_key = var.public_key
+  }
 
 #   resource "azurerm_ssh_public_key" "example" {
 #   name                = "example"
