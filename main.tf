@@ -26,7 +26,7 @@ provider "azurerm" {
 # Create a resource group if it doesn't exist
 resource "azurerm_resource_group" "cicd" {
   name     = "CICD"
-  location = "West Europe"
+  location = var.location
 
   tags = {
     environment = "CICD Infrastructure"
@@ -37,7 +37,7 @@ resource "azurerm_resource_group" "cicd" {
 resource "azurerm_virtual_network" "cicdnetwork" {
   name                = "myVnet"
   address_space       = ["10.0.0.0/16"]
-  location            = "West Europe"
+  location            = var.location
   resource_group_name = azurerm_resource_group.cicd.name
 
   tags = {
@@ -56,7 +56,7 @@ resource "azurerm_subnet" "mycicdsubnet" {
 # Create public IPs
 resource "azurerm_public_ip" "mycicdpublicip" {
   name                = "myPublicIP"
-  location            = "West Europe"
+  location            = var.location
   resource_group_name = azurerm_resource_group.cicd.name
   allocation_method   = "Dynamic"
 
@@ -68,7 +68,7 @@ resource "azurerm_public_ip" "mycicdpublicip" {
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "mycicdnsg" {
   name                = "myNetworkSecurityGroup"
-  location            = "West Europe"
+  location            = var.location
   resource_group_name = azurerm_resource_group.cicd.name
 
   security_rule {
@@ -102,7 +102,7 @@ resource "azurerm_network_security_group" "mycicdnsg" {
 # Create network interface
 resource "azurerm_network_interface" "mycicdnic" {
   name                = "myNIC"
-  location            = "West Europe"
+  location            = var.location
   resource_group_name = azurerm_resource_group.cicd.name
 
   ip_configuration {
@@ -137,7 +137,7 @@ resource "random_id" "randomId" {
 resource "azurerm_storage_account" "mystorageaccount" {
   name                     = "diag${random_id.randomId.hex}"
   resource_group_name      = azurerm_resource_group.cicd.name
-  location                 = "West Europe"
+  location                 = var.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
@@ -159,7 +159,7 @@ resource "azurerm_storage_account" "mystorageaccount" {
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "mycicdvm" {
   name                  = "myVM"
-  location              = "West Europe"
+  location              = var.location
   resource_group_name   = azurerm_resource_group.cicd.name
   network_interface_ids = [azurerm_network_interface.mycicdnic.id]
   size                  = "Standard_DS1_v2"
@@ -189,7 +189,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
 #   resource "azurerm_ssh_public_key" "example" {
 #   name                = "example"
 #   resource_group_name = "example"
-#   location            = "West Europe"
+#   location            = var.location
 #   public_key          = file("~/.ssh/id_rsa.pub")
 # }
 
@@ -215,7 +215,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   resource "azurerm_ssh_public_key" "cicdSSHpublickey" {
   name                = "cicdSSHpublickey"
   resource_group_name = azurerm_resource_group.cicd.name
-  location            = "West Europe"
+  location            = var.location
   public_key          = var.public_key
 }
 
