@@ -1,4 +1,6 @@
 # Configure the Microsoft Azure Provider
+terraform import azurerm_ssh_public_key.example /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/group1/providers/Microsoft.Compute/SshPublicKeys/mySshPublicKeyName1
+
 terraform {
   required_providers {
     azurerm = {
@@ -181,10 +183,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   admin_username                  = "azureuser"
   disable_password_authentication = true
   
-  admin_ssh_key {
-    username   = "azureuser"
-    public_key = var.public_key
-  }
+
 
 #   resource "azurerm_ssh_public_key" "example" {
 #   name                = "example"
@@ -210,14 +209,15 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
       "sudo apt-get install ansible -y"
     ]
   }
+
+  user_data = "#cloud-config\n${jsonencode({
+    package_update  = true
+    package_upgrade = true
+    packages = ["ansible"]
+  })}"
 }
 
-  resource "azurerm_ssh_public_key" "cicdSSHpublickey" {
-  name                = "cicdSSHpublickey"
-  resource_group_name = azurerm_resource_group.cicd.name
-  location            = "West Europe"
-  public_key          = var.public_key
-}
+
 
 data "azurerm_public_ip" "cicd" {
   name                = azurerm_public_ip.mycicdpublicip.name
