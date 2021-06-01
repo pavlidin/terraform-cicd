@@ -171,28 +171,13 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
     environment = "CICD Infrastructure"
   }
 
-}
-
-resource "azurerm_ssh_public_key" "cicdSSHpublickey" {
-  name                = "cicdSSHpublickey"
-  resource_group_name = azurerm_resource_group.cicd.name
-  location            = var.location
-  public_key          = var.public_key
-}
-
-data "azurerm_public_ip" "cicd" {
-  name                = azurerm_public_ip.cicdpublicip.name
-  resource_group_name = azurerm_linux_virtual_machine.cicdvm.resource_group_name
-  depends_on          = [azurerm_linux_virtual_machine.cicdvm]
-}
-
-provisioner "remote-exec" {
+  provisioner "remote-exec" {
     connection {
       type = "ssh"
       user = "azureuser"
       private_key = var.private_key
       timeout = "2m"
-      host = data.azurerm_public_ip.cicd.ip_address
+      host = self.ip_address
     }
     inline = [
       "sudo su",
@@ -221,3 +206,17 @@ provisioner "remote-exec" {
       "systemctl enable containerd.service"
     ]
   }
+}
+
+resource "azurerm_ssh_public_key" "cicdSSHpublickey" {
+  name                = "cicdSSHpublickey"
+  resource_group_name = azurerm_resource_group.cicd.name
+  location            = var.location
+  public_key          = var.public_key
+}
+
+data "azurerm_public_ip" "cicd" {
+  name                = azurerm_public_ip.cicdpublicip.name
+  resource_group_name = azurerm_linux_virtual_machine.cicdvm.resource_group_name
+  depends_on          = [azurerm_linux_virtual_machine.cicdvm]
+}
