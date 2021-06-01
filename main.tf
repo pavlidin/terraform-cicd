@@ -177,7 +177,7 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
       user = "azureuser"
       private_key = var.private_key
       timeout = "2m"
-      host = self.ip_address
+      host = self.public_ip_address
     }
     inline = [
       "sudo su",
