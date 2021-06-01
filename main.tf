@@ -157,7 +157,7 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
   computer_name                   = "${var.prefix}-VM"
   admin_username                  = "azureuser"
   disable_password_authentication = true
-  
+
   admin_ssh_key {
     username   = "azureuser"
     public_key = var.public_key
@@ -198,10 +198,15 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
       "systemctl enable docker.service",
       "systemctl enable containerd.service"
     ]
+    connection {
+      type = "ssh"
+      user = "azureuser"
+      host = data.azurerm_public_ip.cicd.ip_address
+    }
   }
 }
 
-  resource "azurerm_ssh_public_key" "cicdSSHpublickey" {
+resource "azurerm_ssh_public_key" "cicdSSHpublickey" {
   name                = "cicdSSHpublickey"
   resource_group_name = azurerm_resource_group.cicd.name
   location            = var.location
