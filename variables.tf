@@ -25,3 +25,7 @@ variable location {
 variable prefix {
     type = string
 }
+
+variable ipaddress {
+    type = string
+}
