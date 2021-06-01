@@ -180,30 +180,32 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
       host = self.public_ip_address
     }
     inline = [
-      "sudo su",
-      "yum -y update",
+      "sudo mkdir HelloWorld",
+      "sudo yum -y check-update",
+      "sudo yum -y update",
 
       # Install and start Jenkins LTS
-      "wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo",
-      "rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key",
-      "yum -y upgrade",
-      "yum -y install jenkins java-11-openjdk-devel",
-      "systemctl daemon-reload",
-      "systemctl start jenkins",
+      "sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo",
+      "sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key",
+      "sudo yum -y upgrade",
+      "sudo yum -y install jenkins java-11-openjdk-devel",
+      "sudo systemctl daemon-reload",
+      "sudo systemctl start jenkins",
+      "sudo systemctl enable jenkins",
       # cat /var/lib/jenkins/secrets/initialAdminPassword
       # TODO: output this password to terraform cloud
 
       # Install Ansible
-      "yum install -y epel-release",
-      "yum install -y ansible",
+      "sudo yum install -y epel-release",
+      "sudo yum install -y ansible",
 
       # Install and start Docker
-      "yum install -y yum-utils",
-      "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo",
-      "yum install -y docker-ce docker-ce-cli containerd.io",
-      "systemctl start docker",
-      "systemctl enable docker.service",
-      "systemctl enable containerd.service"
+      "sudo yum install -y yum-utils",
+      "sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo",
+      "sudo yum install -y docker-ce docker-ce-cli containerd.io",
+      "sudo systemctl start docker",
+      "sudo systemctl enable docker.service",
+      "sudo systemctl enable containerd.service"
     ]
   }
 }
