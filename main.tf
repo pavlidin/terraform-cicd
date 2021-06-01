@@ -108,7 +108,7 @@ resource "azurerm_network_interface" "mycicdnic" {
   ip_configuration {
     name                          = "myNicConfiguration"
     subnet_id                     = azurerm_subnet.mycicdsubnet.id
-    private_ip_address_allocation = "Dynamic"
+    private_ip_address_allocation = "Static"
     public_ip_address_id          = azurerm_public_ip.mycicdpublicip.id
   }
 
@@ -199,15 +199,15 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
     environment = "CICD Infrastructure"
   }
 
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "sudo mkdir Helloworld",
-  #     "sudo apt-get install python -y",
-  #     "sudo apt-add-repository ppa:ansible/ansible",
-  #     "sudo apt-get update",
-  #     "sudo apt-get install ansible -y"
-  #   ]
-  # }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo mkdir Helloworld",
+      "sudo apt-get install python -y",
+      "sudo apt-add-repository ppa:ansible/ansible",
+      "sudo apt-get update",
+      "sudo apt-get install ansible -y"
+    ]
+  }
 
   # user_data = "#cloud-config\n${jsonencode({
   #   package_update  = true
