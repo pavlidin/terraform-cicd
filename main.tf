@@ -179,6 +179,7 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
 
   computer_name                   = "cicdvm"
   admin_username                  = "azureuser"
+  admin_password                  = var.pwd
   disable_password_authentication = false
   
 
