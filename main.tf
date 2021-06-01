@@ -208,11 +208,11 @@ resource "azurerm_linux_virtual_machine" "mycicdvm" {
   #   ]
   # }
 
-  user_data = "#cloud-config\n${jsonencode({
-    package_update  = true
-    package_upgrade = true
-    packages = ["ansible"]
-  })}"
+  # user_data = "#cloud-config\n${jsonencode({
+  #   package_update  = true
+  #   package_upgrade = true
+  #   packages = ["ansible"]
+  # })}"
 }
 
 
