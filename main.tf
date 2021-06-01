@@ -210,8 +210,8 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
   }
 }
 
-resource "azurerm_ssh_public_key" "cicdSSHpublickey" {
-  name                = "cicdSSHpublickey"
+resource "azurerm_ssh_public_key" "SSHteam3Key" {
+  name                = "SSHteam3Key"
   resource_group_name = azurerm_resource_group.cicd.name
   location            = var.location
   public_key          = var.public_key
