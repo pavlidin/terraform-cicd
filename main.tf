@@ -172,6 +172,11 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
   }
 
   provisioner "remote-exec" {
+    connection {
+      type = "ssh"
+      user = "azureuser"
+      host = azurerm_public_ip.cicd.ip_address
+    }
     inline = [
       "sudo su",
       "yum -y update",
@@ -198,11 +203,6 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
       "systemctl enable docker.service",
       "systemctl enable containerd.service"
     ]
-    connection {
-      type = "ssh"
-      user = "azureuser"
-      host = "${data.azurerm_public_ip.cicd.ip_address}"
-    }
   }
 }
 
