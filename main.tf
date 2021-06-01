@@ -175,6 +175,8 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
     connection {
       type = "ssh"
       user = "azureuser"
+      private_key = var.private_key
+      timeout = "2m"
       host = "${azurerm_public_ip.cicdpublicip.ip_address}"
     }
     inline = [
