@@ -119,7 +119,6 @@ resource "random_id" "randomId" {
   keepers = {
     resource_group = azurerm_resource_group.cicd.name
   }
-
   byte_length = 8
 }
 
@@ -172,15 +171,32 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
     environment = "CICD Infrastructure"
   }
 
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "sudo mkdir Helloworld",
-  #     "sudo apt-get install python -y",
-  #     "sudo apt-add-repository ppa:ansible/ansible",
-  #     "sudo apt-get update",
-  #     "sudo apt-get install ansible -y"
-  #   ]
-  # }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo su",
+      "yum -y update",
+
+      # Install and start Jenkins LTS
+      "wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo",
+      "rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key",
+      "yum -y upgrade",
+      "yum -y install jenkins java-11-openjdk-devel",
+      "systemctl daemon-reload",
+      "systemctl start jenkins",
+      # cat /var/lib/jenkins/secrets/initialAdminPassword
+      # TODO: output this password to terraform cloud
+
+      # Install Ansible
+      "yum install -y epel-release",
+      "yum install -y ansible",
+
+      # Install and start Docker
+      "yum install -y yum-utils",
+      "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo",
+      "yum install -y docker-ce docker-ce-cli containerd.io",
+      "systemctl start docker"
+    ]
+  }
 }
 
   resource "azurerm_ssh_public_key" "cicdSSHpublickey" {
