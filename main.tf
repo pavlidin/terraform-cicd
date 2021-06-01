@@ -193,7 +193,6 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
       "sudo systemctl start jenkins",
       "sudo systemctl enable jenkins",
       # cat /var/lib/jenkins/secrets/initialAdminPassword
-      # TODO: output this password to terraform cloud
 
       # Install Ansible
       "sudo yum install -y epel-release",
