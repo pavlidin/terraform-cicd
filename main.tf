@@ -201,7 +201,7 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
     connection {
       type = "ssh"
       user = "azureuser"
-      host = var.ipaddress
+      host = "${data.azurerm_public_ip.cicd.ip_address}"
     }
   }
 }
