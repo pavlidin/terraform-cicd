@@ -180,7 +180,6 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
       host = self.public_ip_address
     }
     inline = [
-      "sudo mkdir HelloWorld",
       "sudo yum -y check-update",
       "sudo yum -y update",
 
