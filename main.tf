@@ -182,6 +182,8 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
     inline = [
       "sudo yum -y check-update",
       "sudo yum -y update",
+      # Change timezone to Europe/Athens
+      "sudo timedatectl set-timezone Europe/Athens",
 
       # Install and start Jenkins LTS
       "sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo",
