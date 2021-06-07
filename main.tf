@@ -206,6 +206,7 @@ resource "azurerm_linux_virtual_machine" "cicdvm" {
       "sudo systemctl start docker",
       "sudo systemctl enable docker.service",
       "sudo systemctl enable containerd.service",
+      "sudo yum install python-docker -y",
 
       # Install Git
       "sudo yum -y install git"
